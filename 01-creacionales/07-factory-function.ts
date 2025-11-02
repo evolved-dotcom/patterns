@@ -8,31 +8,27 @@
  *
  */
 
-import { COLORS } from '../helpers/colors.ts';
+type Language = 'en' | 'es' | 'fr';
 
-type Language = 'es' | 'en' | 'fr';
-
-// i18n
-function createGreeter(lang: Language) {
-  return function (name: string) {
-    const messages = {
-      es: `Hola, %c${name}!`,
-      en: `Hello, %c${name}!`,
-      fr: `Bonjour, %c${name}!`,
-    };
-
-    return console.log(messages[lang], COLORS.red);
-  };
+function createGreeter(language: Language) {
+  return function (name: string): string {
+      const messages = {
+          es: `Hola, ${name}!`,
+          en: `Hello, ${name}!`,
+          fr: `Bonjour, ${name}!`
+      }
+      return messages[language];
+  }
 }
 
 function main() {
-  const spanishGreeter = createGreeter('es');
-  const englishGreeter = createGreeter('en');
-  const frenchGreeter = createGreeter('fr');
+    const spanishGreeter = createGreeter('es');
+    const englishGreeter = createGreeter('en');
+    const frenchGreeter = createGreeter('fr');
 
-  spanishGreeter('Fernando');
-  englishGreeter('Alice');
-  frenchGreeter('Pierre');
+    console.log(spanishGreeter('Carlos'));
+    console.log(englishGreeter('John'));
+    console.log(frenchGreeter('Marie'));
 }
 
 main();

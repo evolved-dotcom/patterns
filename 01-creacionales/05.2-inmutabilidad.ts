@@ -17,31 +17,20 @@
 
 import { COLORS } from '../helpers/colors.ts';
 
-interface PlayerProps {
-  name: string;
-  score: number;
-  level: number;
-}
-
 // 1. Clase Player inmutable
 class Player {
-  readonly name: string;
-  readonly score: number;
-  readonly level: number;
+  constructor(
+    private readonly name: string,
+    private readonly score: number,
+    private readonly level: number
+  ) {}
 
-  constructor({ level, name, score }: PlayerProps) {
-    this.name = name;
-    this.score = score;
-    this.level = level;
-  }
-
-  // Método copyWith para crear una copia modificada del jugador
   copyWith({ name, score, level }: Partial<Player>): Player {
-    return new Player({
-      level: level ?? this.level,
-      name: name ?? this.name,
-      score: score ?? this.score,
-    });
+    return new Player(
+      name ?? this.name,
+      score ?? this.score,
+      level ?? this.level
+    );
   }
 
   displayState(): void {
@@ -53,26 +42,19 @@ class Player {
 
 // 2. Código Cliente para probar
 function main() {
-  // Crear jugador inicial
-  let player = new Player({
-    level: 1,
-    name: 'Carlos',
-    score: 0,
-  });
+  let player = new Player('Carlos', 0, 1);
   console.log('Estado inicial:');
   player.displayState();
 
-  // Incrementar el puntaje
   player = player.copyWith({ score: 10 });
   console.log('\nDespués de incrementar el puntaje:');
   player.displayState();
 
-  // Subir de nivel
+
   player = player.copyWith({ level: 2 });
   console.log('\nDespués de subir de nivel:');
   player.displayState();
 
-  // Cambiar el nombre del jugador
   player = player.copyWith({ name: 'Carlos Pro' });
   console.log('\nDespués de cambiar el nombre:');
   player.displayState();

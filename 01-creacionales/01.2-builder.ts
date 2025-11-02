@@ -50,8 +50,12 @@ class QueryBuilder {
   }
 
   select(...fields: string[]): QueryBuilder {
-    this.fields = fields;
-    return this;
+      if (fields.length === 0) {
+        this.fields.push('*');
+        return this;
+      }
+      this.fields = fields;
+      return this;
   }
 
   where(condition: string): QueryBuilder {
@@ -60,7 +64,7 @@ class QueryBuilder {
   }
 
   orderBy(field: string, direction: 'ASC' | 'DESC' = 'ASC'): QueryBuilder {
-    this.orderFields.push(`order by ${field} ${direction}`);
+    this.orderFields.push(`${field} ${direction}`);
     return this;
   }
 
@@ -70,35 +74,38 @@ class QueryBuilder {
   }
 
   execute(): string {
-    const fields = this.fields.length > 0 ? this.fields.join(', ') : '*';
+    // Select id, name, email from users where age > 18 and country = 'Cri' order by name ASC limit 10;
+      const fields = this.fields.length > 0 ? this.fields.join(', ') : '*';
+      let query = `SELECT ${fields} FROM ${this.table}`;
 
-    const whereClause =
-      this.conditions.length > 0
-        ? `WHERE ${this.conditions.join(' AND ')}`
-        : ' ';
+    if (this.conditions.length > 0) {
+      query += ` WHERE ${this.conditions.join(' AND ')}`;
+    }
 
-    const orderByClause =
-      this.orderFields.length > 0
-        ? `ORDER BY ${this.orderFields.join(', ')}`
-        : '';
+    if (this.orderFields.length > 0) {
+      query += ` ORDER BY ${this.orderFields.join(', ')}`;
+    }
 
-    const limitClause = this.limitCount ? `LIMIT ${this.limitCount}` : '';
+    if (this.limitCount !== undefined) {
+      query += ` LIMIT ${this.limitCount}`;
+    }
 
-    return `Select ${fields} from ${this.table} ${whereClause} ${orderByClause} ${limitClause}`;
+    query += ';';
+
+    return query;
   }
 }
 
 function main() {
   const usersQuery = new QueryBuilder('users')
     .select('id', 'name', 'email')
-    .where('age > 20')
-    // .where("country = 'CHI'") // Esto debe de hacer una condición AND
+    .where('age > 18')
     .orderBy('name', 'ASC')
-    .orderBy('age', 'DESC')
-    .limit(100)
+    .orderBy('email', 'DESC')
+    .limit(10)
     .execute();
 
-  console.log('%cConsulta:\n', COLORS.red);
+  console.log('%cConsulta:', COLORS.red);
   console.log(usersQuery);
 }
 

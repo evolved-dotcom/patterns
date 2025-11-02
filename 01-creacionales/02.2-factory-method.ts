@@ -24,8 +24,6 @@
       el prompt para seleccionar el tipo de reporte.
  */
 
-import { COLORS } from '../helpers/colors.ts';
-
 // 1. Definir la interfaz Report
 interface Report {
   generate(): void;
@@ -35,15 +33,15 @@ interface Report {
 // Implementar SalesReport e InventoryReport
 
 class SalesReport implements Report {
-  generate(): void {
-    console.log('%cGenerando reporte de ventas...', COLORS.green);
-  }
+    generate(): void {
+        console.log('Generando reporte de ventas...');
+    }
 }
 
 class InventoryReport implements Report {
-  generate(): void {
-    console.log('%cGenerando reporte de inventario...', COLORS.orange);
-  }
+    generate(): void {
+        console.log('Generando reporte de inventario...');
+    }
 }
 
 // 3. Clase Base ReportFactory con el Método Factory

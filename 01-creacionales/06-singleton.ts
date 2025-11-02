@@ -10,70 +10,54 @@
  * https://refactoring.guru/es/design-patterns/singleton
  */
 
-import { COLORS } from '../helpers/colors.ts';
-
 class DragonBalls {
-  private static instance: DragonBalls;
-  private ballsCollected: number;
+    private static instance: DragonBalls;
+    private ballsCollected: number;
 
-  private constructor() {
-    this.ballsCollected = 0;
-  }
-
-  public static getInstance(): DragonBalls {
-    if (!DragonBalls.instance) {
-      DragonBalls.instance = new DragonBalls();
-      console.log('%cLas pelotas del Dragón han sido creadas!', COLORS.green);
+    private constructor() {
+        this.ballsCollected = 0;
     }
 
-    return DragonBalls.instance;
-  }
-
-  collectBall(): void {
-    if (this.ballsCollected < 7) {
-      this.ballsCollected++;
-      console.log(
-        `Pelota recolectada. Total de esferas: ${this.ballsCollected}`
-      );
-      return;
+    public static getInstance(): DragonBalls {
+        if (!DragonBalls.instance) {
+            DragonBalls.instance = new DragonBalls();
+        }
+        return DragonBalls.instance;
     }
 
-    console.log(
-      'Ya se han recolectado las 7 esferas del Dragón! Invoca a Shenlong'
-    );
-  }
-
-  summonShenlong() {
-    if (this.ballsCollected === 7) {
-      console.log('Shenlong ha sido invocado, Pide tu deseo!');
-      this.ballsCollected = 0;
-      return;
+    collectBall() {
+        if (this.ballsCollected >= 7) {
+            console.log("¡Ya has recogido las 7 bolas de dragón!");
+            return;
+        }
+        this.ballsCollected += 1;
+        console.log(`Has recogido una bola de dragón. Total: ${this.ballsCollected}`);
     }
 
-    console.log(
-      `\nAún faltan ${7 - this.ballsCollected} pelotas para invocar a Shenlong`
-    );
-  }
+    makeAWish() {
+        if (this.ballsCollected === 7) {
+            console.log("¡Has reunido las 7 bolas de dragón! Puedes pedir un deseo.");
+            this.ballsCollected = 0;
+        } else {
+            console.log(`Aún te faltan ${7 - this.ballsCollected} bolas de dragón para pedir un deseo.`);
+        }
+    }
 }
 
 function main() {
-  const gokuDragonBalls = DragonBalls.getInstance();
+    const gokuDragonBalls = DragonBalls.getInstance();
+    gokuDragonBalls.collectBall();
+    gokuDragonBalls.collectBall();
 
-  gokuDragonBalls.collectBall();
-  gokuDragonBalls.collectBall();
-  gokuDragonBalls.collectBall();
 
-  gokuDragonBalls.summonShenlong();
+    const vegetaDragonBalls = DragonBalls.getInstance();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
 
-  const vegetaDragonBalls = DragonBalls.getInstance();
-  vegetaDragonBalls.collectBall();
-  vegetaDragonBalls.collectBall();
-  vegetaDragonBalls.collectBall();
-  vegetaDragonBalls.collectBall();
-
-  gokuDragonBalls.summonShenlong();
-
-  vegetaDragonBalls.summonShenlong();
+    gokuDragonBalls.makeAWish();
 }
 
 main();
