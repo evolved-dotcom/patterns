@@ -9,3 +9,59 @@
  *
  * https://refactoring.guru/es/design-patterns/bridge
  */
+
+import { COLORS } from '../helpers/colors.ts';
+
+// 1. Interfaz NotificationChannel
+interface NotificationChannel {
+    send (message: string): void;
+}
+
+// 2. Implementaciones de Canales de Comunicación
+
+class EmailChannel implements NotificationChannel {
+    send (message: string): void {
+        console.log(`Enviando correo electrónico: ${message}`);
+    }
+}
+
+class SMSChannel implements NotificationChannel {
+    send (message: string): void {
+        console.log(`Enviando SMS: ${message}`);
+    }
+}
+
+class PushNotificationChannel implements NotificationChannel {
+    send (message: string): void {
+        console.log(`Enviando Push: ${message}`);
+    }
+}
+
+// 3. Clase Abstracta Notification
+
+abstract class Notification {
+    protected channels: NotificationChannel[];
+
+    constructor (channel: NotificationChannel[]) {
+        this.channels = channel;
+    }
+
+    abstract notify (message: string): void;
+
+    abstract addChannel (channel: NotificationChannel): void;
+}
+
+class AlertNotification extends Notification {
+    addChannel(channel: NotificationChannel): void {
+        this.channels.push(channel);
+    }
+
+    notify(message: string): void {
+        console.log('\n%cNotificación de alerta:', COLORS.yellow);
+        this.channels.forEach((channel: NotificationChannel) => channel.send(message));
+    }
+}
+
+const alertNotification = new AlertNotification([new EmailChannel(), new SMSChannel()]);
+
+alertNotification.notify('¡Alerta crítica!');

@@ -9,3 +9,59 @@
  *
  * https://refactoring.guru/es/design-patterns/bridge
  */
+
+interface Ability {
+    use(): void;
+}
+
+class SwordAttack implements Ability {
+    use(): void {
+        console.log("Ataque con espada");
+    }
+}
+
+class AxeAttack implements Ability {
+    use(): void {
+        console.log("Ataque con hacha");
+    }
+}
+
+class MagicSpell implements Ability {
+    use(): void {
+        console.log("Lanzando hechizo mágico");
+    }
+}
+
+abstract class Character {
+    protected ability: Ability;
+
+    constructor(ability: Ability) {
+        this.ability = ability;
+    }
+
+    setAbility(ability: Ability): void {
+        this.ability = ability;
+    }
+
+    abstract performAbility(): void;
+}
+
+class Warrior extends Character {
+    override performAbility(): void {
+        console.log("Guerrero realiza:");
+        this.ability.use();
+    }
+}
+
+class Mage extends Character {
+    override performAbility(): void {
+        console.log("Mago realiza:");
+        this.ability.use();
+    }
+}
+
+const warrior = new Warrior(new SwordAttack());
+warrior.performAbility();
+
+warrior.setAbility(new AxeAttack());
+warrior.performAbility();
